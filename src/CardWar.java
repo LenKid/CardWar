@@ -53,6 +53,17 @@ public class CardWar {
         String nombreJugador = sc.nextLine();
         String nombreCPU = "CPU";
 
+        // Crear estados de jugadores
+        JugadorEstado estadoJugador = new JugadorEstado(nombreJugador);
+        JugadorEstado estadoCPU = new JugadorEstado(nombreCPU);
+        estadoJugador.setCartasRestantes(26);
+        estadoCPU.setCartasRestantes(26);
+
+        // Tabla hash para estado de jugadores
+        TablaHash estado = new TablaHash(2);
+        estado.insertar(0, estadoJugador);
+        estado.insertar(1, estadoCPU);
+
         int rondas = 1, ganadasJugador = 0, ganadasCPU = 0, empates = 0;
 
         System.out.println("\nBienvenido a Guerra de Cartas 🛡️");
@@ -123,13 +134,19 @@ public class CardWar {
             }
 
             // Actualizar estado en tabla hash
-            estado.insertar(0, contarCartas(mazoJugador));
-            estado.insertar(1, contarCartas(mazoCPU));
+            estadoJugador.setCartasRestantes(contarCartas(mazoJugador));
+            estadoCPU.setCartasRestantes(contarCartas(mazoCPU));
+            estadoJugador.setVictorias(ganadasJugador);
+            estadoCPU.setVictorias(ganadasCPU);
+            estadoJugador.setEmpates(empates);
+            estadoCPU.setEmpates(empates);
+            estado.insertar(0, estadoJugador);
+            estado.insertar(1, estadoCPU);
 
             // Mostrar estado
             System.out.println("\n--- Estado actual ---");
-            System.out.println(nombreJugador + " tiene " + contarCartas(mazoJugador) + " cartas");
-            System.out.println(nombreCPU + " tiene " + contarCartas(mazoCPU) + " cartas");
+            System.out.println(estadoJugador.getNombre() + " tiene " + estadoJugador.getCartasRestantes() + " cartas | Victorias: " + estadoJugador.getVictorias() + " | Empates: " + estadoJugador.getEmpates());
+            System.out.println(estadoCPU.getNombre() + " tiene " + estadoCPU.getCartasRestantes() + " cartas | Victorias: " + estadoCPU.getVictorias() + " | Empates: " + estadoCPU.getEmpates());
 
             System.out.println("\nPresione Enter para continuar...");
             sc.nextLine();
@@ -140,6 +157,7 @@ public class CardWar {
         System.out.println(nombreJugador + " ganó " + ganadasJugador + " rondas.");
         System.out.println(nombreCPU + " ganó " + ganadasCPU + " rondas.");
         System.out.println("Empates: " + empates);
+        historial.mostrarPila(); // ← Correcto aquí para mostrar el historial final
     }
 
     // Métodos auxiliares

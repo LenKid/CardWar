@@ -9,41 +9,43 @@ public class TablaHash {
         this.tabla = new NodoDoble[capacidad];
     }
 
-    // Función hash simple
     private int hash(int clave) {
         return Math.abs(clave) % capacidad;
     }
 
-    // Insertar un valor en la tabla hash
-    public void insertar(int clave, int valor) {
+    // Insertar o actualizar estado de jugador
+    public void insertar(int clave, JugadorEstado estado) {
         int indice = hash(clave);
-        NodoDoble nuevo = new NodoDoble();
-        nuevo.setValor(valor);
+        NodoDoble actual = tabla[indice];
 
-        if (tabla[indice] == null) {
-            tabla[indice] = nuevo;
-        } else {
-            NodoDoble actual = tabla[indice];
-            while (actual.getSiguiente() != null) {
-                actual = actual.getSiguiente();
+        // Si ya existe, actualiza
+        while (actual != null) {
+            if (actual.getClave() == clave) {
+                actual.setEstado(estado);
+                return;
             }
-            actual.setSiguiente(nuevo);
-            nuevo.setAnterior(actual);
+            actual = actual.getSiguiente();
         }
+
+        // Si no existe, inserta al inicio
+        NodoDoble nuevo = new NodoDoble(clave, estado);
+        nuevo.setSiguiente(tabla[indice]);
+        if (tabla[indice] != null) {
+            tabla[indice].setAnterior(nuevo);
+        }
+        tabla[indice] = nuevo;
     }
 
-    // Buscar un valor por clave
-    public Integer buscar(int clave) {
+    // Buscar estado de jugador por clave
+    public JugadorEstado buscar(int clave) {
         int indice = hash(clave);
         NodoDoble actual = tabla[indice];
         while (actual != null) {
-            if (actual.getValor() == clave) {
-                return actual.getValor();
+            if (actual.getClave() == clave) {
+                return actual.getEstado();
             }
             actual = actual.getSiguiente();
         }
         return null;
     }
-
-    // Puedes agregar métodos para eliminar, actualizar, etc.
 }
