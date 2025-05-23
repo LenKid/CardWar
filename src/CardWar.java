@@ -1,9 +1,7 @@
-package control;
-
-import model.*;
 import java.util.Scanner;
+import model.*;
 
-public class Main {
+public class CardWar {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
@@ -83,35 +81,44 @@ public class Main {
             } else {
                 System.out.println("Empate! Se inicia la guerra...");
                 empates++;
-                // Árbol de decisión para guerra
-                arbol.insertar(1); // Nodo raíz: ¿Hay empate? (1 = sí)
-                boolean jugadorPuede = mazoJugador.getInicio() != null && mazoJugador.getInicio().getSiguiente() != null;
-                boolean cpuPuede = mazoCPU.getInicio() != null && mazoCPU.getInicio().getSiguiente() != null;
+                // Árbol de decisión para guerra (simbólico)
+                arbol.insertar(1);
+
+                // Verificar si ambos pueden continuar la guerra
+                boolean jugadorPuede = contarCartas(mazoJugador) >= 2;
+                boolean cpuPuede = contarCartas(mazoCPU) >= 2;
                 if (!jugadorPuede || !cpuPuede) {
                     System.out.println("Algún jugador no tiene suficientes cartas para la guerra.");
                     if (!jugadorPuede) System.out.println(nombreJugador + " pierde la guerra.");
                     if (!cpuPuede) System.out.println(nombreCPU + " pierde la guerra.");
                     break;
                 }
+
                 // Ambos colocan una carta boca abajo y otra boca arriba
                 int bocaAbajoJ = mazoJugador.desenColar();
                 int bocaAbajoC = mazoCPU.desenColar();
                 int guerraJ = mazoJugador.desenColar();
                 int guerraC = mazoCPU.desenColar();
+
                 System.out.println(nombreJugador + " coloca: " + cartaToString(guerraJ) + " (boca arriba)");
                 System.out.println(nombreCPU + " coloca: " + cartaToString(guerraC) + " (boca arriba)");
+
+                // El ganador se lleva todas las cartas jugadas en la guerra
                 if (valorCarta(guerraJ) > valorCarta(guerraC)) {
                     System.out.println("Ganador de la guerra: " + nombreJugador);
                     mazoJugador.enColar(cartaJ); mazoJugador.enColar(cartaC);
                     mazoJugador.enColar(bocaAbajoJ); mazoJugador.enColar(bocaAbajoC);
                     mazoJugador.enColar(guerraJ); mazoJugador.enColar(guerraC);
                     ganadasJugador++;
-                } else {
+                } else if (valorCarta(guerraJ) < valorCarta(guerraC)) {
                     System.out.println("Ganador de la guerra: " + nombreCPU);
                     mazoCPU.enColar(cartaJ); mazoCPU.enColar(cartaC);
                     mazoCPU.enColar(bocaAbajoJ); mazoCPU.enColar(bocaAbajoC);
                     mazoCPU.enColar(guerraJ); mazoCPU.enColar(guerraC);
                     ganadasCPU++;
+                } else {
+                    // Si vuelve a haber empate, puedes repetir la guerra o decidir el empate según tus reglas
+                    System.out.println("¡Empate en la guerra! Puedes implementar una guerra recursiva aquí.");
                 }
             }
 
