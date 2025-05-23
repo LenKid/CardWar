@@ -1,6 +1,10 @@
 import java.util.Scanner;
 import model.*;
 
+/*
+@Author: Kedin Sebastian Valencia Flor, Jair Hoyos Anacona, Jonathan Tobar, Samuel Housset
+*/
+
 public class CardWar {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
