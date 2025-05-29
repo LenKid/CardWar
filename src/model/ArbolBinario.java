@@ -15,12 +15,12 @@ public class ArbolBinario {
     private NodoDoble insertarRec(NodoDoble nodo, int valor) {
         if (nodo == null) {
             NodoDoble nuevo = new NodoDoble();
-            nuevo.setValor(valor);
+            nuevo.setClave(valor);
             return nuevo;
         }
-        if (valor < nodo.getValor()) {
+        if (valor < nodo.getClave()) {
             nodo.setAnterior(insertarRec(nodo.getAnterior(), valor)); // Izquierdo
-        } else if (valor > nodo.getValor()) {
+        } else if (valor > nodo.getClave()) {
             nodo.setSiguiente(insertarRec(nodo.getSiguiente(), valor)); // Derecho
         }
         return nodo;
@@ -35,10 +35,10 @@ public class ArbolBinario {
         if (nodo == null) {
             return false;
         }
-        if (valor == nodo.getValor()) {
+        if (valor == nodo.getClave()) {
             return true;
         }
-        return valor < nodo.getValor()
+        return valor < nodo.getClave()
             ? buscarRec(nodo.getAnterior(), valor)
             : buscarRec(nodo.getSiguiente(), valor);
     }
