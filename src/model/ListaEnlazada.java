@@ -35,7 +35,6 @@ public class ListaEnlazada {
                 nuevo.setSiguiente((this.cabecera));
                 this.cabecera = nuevo;
             }
-            System.out.println("Nodo insertado al inicio con éxito!");
         }
     }
 

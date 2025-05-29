@@ -3,6 +3,21 @@ package control;
 import java.util.Scanner;
 import model.*;
 
+/*
+ * ==========================
+ *   GUERRA DE CARTAS - REGLAS
+ * ==========================
+ * 1. Se reparten todas las cartas entre dos jugadores.
+ * 2. En cada ronda, ambos jugadores sacan la primera carta de su mazo.
+ *    - El jugador con la carta de mayor valor gana ambas cartas y las coloca al final de su mazo.
+ *    - Si hay empate, se inicia una "guerra":
+ *        a) Cada jugador coloca una carta boca abajo (oculta) y otra boca arriba.
+ *        b) El valor de la nueva carta boca arriba decide quién gana todas las cartas jugadas en ese turno.
+ *        c) En caso de empate en la guerra, se puede repetir el proceso si ambos tienen suficientes cartas.
+ *    - En este juego, el jugador elige qué cartas usar en la guerra.
+ * 3. El juego termina cuando un jugador se queda sin cartas o el usuario decide salir.
+ */
+
 public class JuegoCartas {
 
     public void iniciarJuego() {
@@ -70,6 +85,21 @@ public class JuegoCartas {
         int rondas = 1, ganadasJugador = 0, ganadasCPU = 0, empates = 0;
 
         System.out.println("\nBienvenido a Guerra de Cartas 🛡️");
+        System.out.println(
+            "===================================\n" +
+            "        GUERRA DE CARTAS - REGLAS  \n" +
+            "===================================\n" +
+            "1. Se reparten todas las cartas entre dos jugadores.\n" +
+            "2. En cada ronda, ambos jugadores sacan la primera carta de su mazo.\n" +
+            "   - El jugador con la carta de mayor valor gana ambas cartas y las coloca al final de su mazo.\n" +
+            "   - Si hay empate, se inicia una 'guerra':\n" +
+            "     a) Cada jugador coloca una carta boca abajo (oculta) y otra boca arriba.\n" +
+            "     b) El valor de la nueva carta boca arriba decide quién gana todas las cartas jugadas en ese turno.\n" +
+            "     c) En caso de empate en la guerra, se puede repetir el proceso si ambos tienen suficientes cartas.\n" +
+            "   - En este juego, el jugador elige qué cartas usar en la guerra.\n" +
+            "3. El juego termina cuando un jugador se queda sin cartas o el usuario decide salir.\n" +
+            "===================================\n"
+        );
 
         while (!mazoJugador.esVacia() && !mazoCPU.esVacia()) {
             System.out.println("\n--- Ronda " + rondas + " ---");
@@ -159,8 +189,12 @@ public class JuegoCartas {
             System.out.println(estadoJugador.getNombre() + " tiene " + estadoJugador.getCartasRestantes() + " cartas | Victorias: " + estadoJugador.getVictorias() + " | Empates: " + estadoJugador.getEmpates());
             System.out.println(estadoCPU.getNombre() + " tiene " + estadoCPU.getCartasRestantes() + " cartas | Victorias: " + estadoCPU.getVictorias() + " | Empates: " + estadoCPU.getEmpates());
 
-            System.out.println("\nPresione Enter para continuar...");
-            sc.nextLine();
+            System.out.println("\nPresione Enter para continuar o 'x' para salir...");
+            String input = sc.nextLine();
+            if (input.equalsIgnoreCase("x")) {
+                System.out.println("Saliendo del juego...");
+                break;
+            }
             rondas++;
         }
 
@@ -168,6 +202,7 @@ public class JuegoCartas {
         System.out.println(nombreJugador + " ganó " + ganadasJugador + " rondas.");
         System.out.println(nombreCPU + " ganó " + ganadasCPU + " rondas.");
         System.out.println("Empates: " + empates);
+        System.err.println("---- Cartas Jugadas ----");
         historial.mostrarPila();
         sc.close();
     }
