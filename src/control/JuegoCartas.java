@@ -106,25 +106,38 @@ public class JuegoCartas {
                     break;
                 }
 
-                int bocaAbajoJ = mazoJugador.desenColar();
+                // Mostrar cartas del jugador
+                System.out.println("\nTus cartas actuales:");
+                mostrarCartasJugador(mazoJugador);
+
+                // Selección de carta boca abajo
+                int posBocaAbajo = pedirCarta(sc, mazoJugador, "Selecciona la posición de la carta que pondrás boca abajo (1 = primera carta): ");
+                int cartaBocaAbajo = extraerCartaPorPosicion(mazoJugador, posBocaAbajo);
+
+                // Selección de carta boca arriba
+                System.out.println("\nTus cartas restantes:");
+                mostrarCartasJugador(mazoJugador);
+                int posBocaArriba = pedirCarta(sc, mazoJugador, "Selecciona la posición de la carta que pondrás boca arriba (1 = primera carta): ");
+                int cartaBocaArriba = extraerCartaPorPosicion(mazoJugador, posBocaArriba);
+
+                // CPU selecciona automáticamente (primeras dos cartas)
                 int bocaAbajoC = mazoCPU.desenColar();
-                int guerraJ = mazoJugador.desenColar();
                 int guerraC = mazoCPU.desenColar();
 
-                System.out.println(nombreJugador + " coloca: " + cartaToString(guerraJ) + " (boca arriba)");
+                System.out.println(nombreJugador + " coloca: " + cartaToString(cartaBocaArriba) + " (boca arriba)");
                 System.out.println(nombreCPU + " coloca: " + cartaToString(guerraC) + " (boca arriba)");
 
-                if (valorCarta(guerraJ) > valorCarta(guerraC)) {
+                if (valorCarta(cartaBocaArriba) > valorCarta(guerraC)) {
                     System.out.println("Ganador de la guerra: " + nombreJugador);
                     mazoJugador.enColar(cartaJ); mazoJugador.enColar(cartaC);
-                    mazoJugador.enColar(bocaAbajoJ); mazoJugador.enColar(bocaAbajoC);
-                    mazoJugador.enColar(guerraJ); mazoJugador.enColar(guerraC);
+                    mazoJugador.enColar(cartaBocaAbajo); mazoJugador.enColar(bocaAbajoC);
+                    mazoJugador.enColar(cartaBocaArriba); mazoJugador.enColar(guerraC);
                     ganadasJugador++;
-                } else if (valorCarta(guerraJ) < valorCarta(guerraC)) {
+                } else if (valorCarta(cartaBocaArriba) < valorCarta(guerraC)) {
                     System.out.println("Ganador de la guerra: " + nombreCPU);
                     mazoCPU.enColar(cartaJ); mazoCPU.enColar(cartaC);
-                    mazoCPU.enColar(bocaAbajoJ); mazoCPU.enColar(bocaAbajoC);
-                    mazoCPU.enColar(guerraJ); mazoCPU.enColar(guerraC);
+                    mazoCPU.enColar(cartaBocaAbajo); mazoCPU.enColar(bocaAbajoC);
+                    mazoCPU.enColar(cartaBocaArriba); mazoCPU.enColar(guerraC);
                     ganadasCPU++;
                 } else {
                     System.out.println("¡Empate en la guerra!");
@@ -180,5 +193,53 @@ public class JuegoCartas {
             actual = actual.getSiguiente();
         }
         return count;
+    }
+
+    // Muestra las cartas del jugador con posiciones
+    public static void mostrarCartasJugador(Cola mazo) {
+        Nodo actual = mazo.getInicio();
+        int pos = 1;
+        while (actual != null) {
+            System.out.println(pos + ": " + cartaToString(actual.getValor()));
+            actual = actual.getSiguiente();
+            pos++;
+        }
+    }
+
+    // Pide al usuario una posición válida de carta
+    public static int pedirCarta(Scanner sc, Cola mazo, String mensaje) {
+        int total = contarCartas(mazo);
+        int pos;
+        do {
+            System.out.print(mensaje);
+            while (!sc.hasNextInt()) {
+                System.out.print("Ingrese un número válido: ");
+                sc.next();
+            }
+            pos = sc.nextInt();
+        } while (pos < 1 || pos > total);
+        sc.nextLine(); // limpiar buffer
+        return pos;
+    }
+
+    // Extrae y retorna la carta en la posición indicada (1 = primera carta)
+    public static int extraerCartaPorPosicion(Cola mazo, int posicion) {
+        Cola temp = new Cola();
+        int valor = -1;
+        int count = 1;
+        while (!mazo.esVacia()) {
+            int carta = mazo.desenColar();
+            if (count == posicion) {
+                valor = carta;
+            } else {
+                temp.enColar(carta);
+            }
+            count++;
+        }
+        // Restaurar las cartas al mazo original
+        while (!temp.esVacia()) {
+            mazo.enColar(temp.desenColar());
+        }
+        return valor;
     }
 }
