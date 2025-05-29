@@ -7,7 +7,7 @@ public class ArbolBinario {
         this.raiz = null;
     }
 
-    // Insertar un valor en el árbol
+    // Insertar un valor en el árbol binario
     public void insertar(int valor) {
         raiz = insertarRec(raiz, valor);
     }
@@ -26,18 +26,19 @@ public class ArbolBinario {
         return nodo;
     }
 
-    // Buscar un valor en el árbol
+      // Buscar un valor dentro del árbol
     public boolean buscar(int valor) {
         return buscarRec(raiz, valor);
     }
 
     private boolean buscarRec(NodoDoble nodo, int valor) {
         if (nodo == null) {
-            return false;
+            return false; // Árbol vacío o no encontrado
         }
         if (valor == nodo.getClave()) {
-            return true;
+            return true;// Valor encontrado
         }
+        // Buscar en subArbol izquierdo o derecho dependiendo del valor
         return valor < nodo.getClave()
             ? buscarRec(nodo.getAnterior(), valor)
             : buscarRec(nodo.getSiguiente(), valor);

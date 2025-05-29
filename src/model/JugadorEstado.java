@@ -1,11 +1,11 @@
 package model;
 
 public class JugadorEstado {
-    private String nombre;
-    private int cartasRestantes;
-    private int victorias;
-    private int empates;
-
+    private String nombre;    // Nombre del jugador
+    private int cartasRestantes;    // Cantidad de cartas que le quedan al jugador
+    private int victorias;   // Cantidad de victorias del jugador
+    private int empates;    // Cantidad de empates del jugador
+    // Constructor que inicializa el nombre y pone todo lo demas en cero
     public JugadorEstado(String nombre) {
         this.nombre = nombre;
         this.cartasRestantes = 0;
@@ -13,7 +13,7 @@ public class JugadorEstado {
         this.empates = 0;
     }
 
-    // Getters y setters
+    // Getters y setters para acceder y modificar los datos del jugador
     public String getNombre() {
         return nombre;
     }

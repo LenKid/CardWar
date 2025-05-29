@@ -20,8 +20,8 @@ public class ListaEnlazada {
     }
 
     public void insertarNodoInicial(int valor) {
-        Nodo nuevo = new Nodo();
-        nuevo.setValor(valor);
+        Nodo nuevo = new Nodo(); // crea un nuevo nodo
+        nuevo.setValor(valor); // le pone el valor
         if (esVacia()) {
             this.cabecera = nuevo;
             nuevo.setSiguiente(cabecera);
@@ -37,7 +37,7 @@ public class ListaEnlazada {
             }
         }
     }
-
+    // Inserta un nodo al final de la lista
     public void insertarNodoFinal(int valor) {
         Nodo nuevo = new Nodo();
         nuevo.setValor(valor);
@@ -47,7 +47,7 @@ public class ListaEnlazada {
             nuevo.setSiguiente(cabecera); // El siguiente del nuevo nodo apunta a sí mismo (lista circular)
         } else {
             Nodo auxiliar = this.cabecera;
-            // Encuentra el último nodo
+            // Encuentra el ultimo nodo
             while (auxiliar.getSiguiente() != this.cabecera) {
                 auxiliar = auxiliar.getSiguiente();
             }
@@ -56,7 +56,6 @@ public class ListaEnlazada {
             auxiliar.setSiguiente(nuevo);
             nuevo.setSiguiente(this.cabecera); // El siguiente del nuevo nodo apunta a la cabecera (lista circular)
         }
-        System.out.println("Nodo insertado al final con éxito!");
     }
 
     public void eliminaCabecera() {
